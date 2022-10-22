@@ -19,20 +19,20 @@ def load_table(fin, binsize, verbose, filt):
         if line.startswith("#"): continue
         line = line.strip().split()
         pos = int(line[0])
-        a, b = map(float, line[1:3])
+        a, b = list(map(float, line[1:3]))
         if filt and (a <= 0 or b <= 0): # We might miss really
                                         # informative SNPs, but we're
                                         # probably just missing
                                         # fixated markers... so skip
                                         # them
-            if verbose and a+b>0: print >>sys.stderr, "Skipping", line
+            if verbose and a+b>0: print("Skipping", line, file=sys.stderr)
             continue
         bin_start = pos - (pos % binsize)
         temp[bin_start] += (a,b)
     fin.close()
 
     # Set bin edges from range of bin keys.
-    bin_starts = numpy.array(temp.keys())
+    bin_starts = numpy.array(list(temp.keys()))
     first_bin_edge = numpy.amin(bin_starts)
     last_bin_edge = numpy.amax(bin_starts) + binsize
     bins = numpy.arange(first_bin_edge, last_bin_edge + 1, binsize) # include last bin edge
@@ -41,15 +41,15 @@ def load_table(fin, binsize, verbose, filt):
     if filt:
         # Filter highly-outlying counts.  Preprocessing should take
         # care of this, but this is another layer of help.
-        median = numpy.median(temp.values())
+        median = numpy.median(list(temp.values()))
 
         # Filter by median absolute deviation.
-        cutoff = 20 * numpy.median(abs(numpy.array(temp.values()) - median)) + median
-        print >>sys.stderr, "cutoff:", cutoff
+        cutoff = 20 * numpy.median(abs(numpy.array(list(temp.values())) - median)) + median
+        print("cutoff:", cutoff, file=sys.stderr)
 
-        for k,v in temp.iteritems():
+        for k,v in temp.items():
             if sum(v) > cutoff:
-                print >>sys.stderr, "Filtering allele counts:", v
+                print("Filtering allele counts:", v, file=sys.stderr)
                 temp[k] = v-v
 
     means = numpy.zeros(len(bin_starts))
@@ -106,7 +106,7 @@ def kalman(y, y_var, d, T, N, p):
         c[0] = 1.0
 
     # Forward pass:
-    for i in xrange(1,T):
+    for i in range(1,T):
         if i == 1:
             P[i-1] = A**2.0*V_initial + S
         else:
@@ -128,7 +128,7 @@ def kalman(y, y_var, d, T, N, p):
     logLik = numpy.sum(numpy.log(c))
 
     # Backwards pass:
-    for i in xrange(T-2,-1,-1):
+    for i in range(T-2,-1,-1):
         J = V[i]*A/P[i]
         mu_pstr[i] = mu[i] + J * (mu_pstr[i+1] - A*(mu[i]) - N*p)
         V_pstr[i] = V[i] + J**2.0 * (V_pstr[i+1] - P[i])
@@ -163,7 +163,7 @@ def calcLODs_multicoupled(mu_pstr_vec, V_pstr_vec, T, N):
     # log Pr(x_i=j) (unconditional model, from the stationary distribution)
     logreweighter = lognormpdf(N*x, mu_initial, numpy.sqrt(V_initial))
 
-    for i in xrange(T):
+    for i in range(T):
         logallsums = numpy.zeros(len(x))
         for mu_pstr, V_pstr in zip(mu_pstr_vec, V_pstr_vec):
             # log( Pr(x_i=j | y)) - log( Pr(x_i=j))
@@ -223,7 +223,7 @@ def doLoading(fins, filt):
             y_var = numpy.pad(y_var, pad_widths, 'constant', constant_values=numpy.inf)
             d = numpy.pad(d, pad_widths, 'constant', constant_values=0)
 
-            for i in xrange(len(y2)):
+            for i in range(len(y2)):
                 pad_widths = lpads[i+1], rpads[i+1]
                 y2[i] = numpy.pad(y2[i], pad_widths, 'constant', constant_values=0)
                 y_var2[i] = numpy.pad(y_var2[i], pad_widths, 'constant', constant_values=numpy.inf)
@@ -231,7 +231,7 @@ def doLoading(fins, filt):
     else:
         y2 = None
 
-    print >>sys.stderr, "Loaded %d informative reads" % sum(d)
+    print("Loaded %d informative reads" % sum(d), file=sys.stderr)
 
     if y2 is None:
         T = len(y) # Observations (max time index)
@@ -241,7 +241,7 @@ def doLoading(fins, filt):
         y_var = y_var[:T]
         d = d[:T]
 
-        for i in xrange(len(y2)):
+        for i in range(len(y2)):
             y2[i] = y2[i][:T]
             y_var2[i] = y_var2[i][:T]
             d2[i] = d2[i][:T]
@@ -249,20 +249,20 @@ def doLoading(fins, filt):
     start, stop = 0,0 # T/2,T # 2*T/5, T # 2*T/5, T # 2*T/11, T
     y_var[start:stop] = float("inf")
     if y2 is not None:
-        for i in xrange(len(y_var2)):
+        for i in range(len(y_var2)):
             y_var2[i][start:stop] = float("inf")
     d[start:stop] = 0
     if y2 is not None: 
-        for i in xrange(len(d2)):
+        for i in range(len(d2)):
             d2[i][start:stop] = 0
 
     return y, y_var, y2, y_var2, d, d2, T, bins
 
 def doOutput(fout, T, res, LOD, mu_MLE, N, bins):
     bin_starts = bins[:-1]
-    print >>fout, "Bin start (bp)\tMLE allele freq.\tLOD score"
-    for i in xrange(T):
-        print >>fout, "%d\t%.4f\t%.2f" % (bin_starts[i], 1.0*mu_MLE[i]/N, LOD[i])
+    print("Bin start (bp)\tMLE allele freq.\tLOD score", file=fout)
+    for i in range(T):
+        print("%d\t%.4f\t%.2f" % (bin_starts[i], 1.0*mu_MLE[i]/N, LOD[i]), file=fout)
     fout.flush()
 
 def parseArgs():
@@ -328,7 +328,7 @@ def doPlotting(y, y2, d, d2, LOD, mu_MLE, mu_pstr, mu_pstr2, V_pstr, V_pstr2,
 
     if N < 10000:
         posteriors = numpy.zeros((N,T))
-        for c in xrange(T):
+        for c in range(T):
             posteriors[:,c] = scipy.stats.norm.pdf(numpy.arange(0,1.0,1.0/N), mu_pstr[c]/N, numpy.sqrt(V_pstr[c])/N)
             posteriors[:,c] /= numpy.sum(posteriors[:,c])
 
@@ -384,7 +384,7 @@ def doComputation(y, y_var, y2, y_var2, d, d2, T, bins):
         else:
             break
 
-    print >>sys.stderr, "50% credible interval spans", bins[left], bins[right], "length is:", (bins[right] - bins[left])
+    print("50% credible interval spans", bins[left], bins[right], "length is:", (bins[right] - bins[left]), file=sys.stderr)
 
     cumul, mean = 0.0, 0.0
     left, right = None, None
@@ -398,29 +398,29 @@ def doComputation(y, y_var, y2, y_var2, d, d2, T, bins):
     if left is None or left < 0: left = 0 # bound at zero
     if right is None: right = T
 
-    print >>sys.stderr, "90% credible interval spans", bins[left], bins[right], "length is:", (bins[right] - bins[left]), "mean:", mean, "mode:", bins[temp.argmax()]
+    print("90% credible interval spans", bins[left], bins[right], "length is:", (bins[right] - bins[left]), "mean:", mean, "mode:", bins[temp.argmax()], file=sys.stderr)
     left90 = left
     right90 = right
 
     maxLOD = LOD.max()
     maxIndex = LOD.argmax()
-    print >>sys.stderr, "Max multi-locus LOD score at:", maxLOD, bins[maxIndex]
+    print("Max multi-locus LOD score at:", maxLOD, bins[maxIndex], file=sys.stderr)
     index = maxIndex
     while index > 0 and LOD[index] > maxLOD-1.0:
         index -= 1
     left = index
-    print >>sys.stderr, "1-LOD interval from ", bins[index],
+    print("1-LOD interval from ", bins[index], end=' ', file=sys.stderr)
     index = maxIndex
     while index < T and LOD[index] > maxLOD-1.0:
         index += 1
-    print >>sys.stderr, "to", bins[index], "length is:", (bins[index] - bins[left])
+    print("to", bins[index], "length is:", (bins[index] - bins[left]), file=sys.stderr)
 
     D = 30 # Assume that contributions to the location are effectively
            # zero when you go this many bins away.
     try:
         i = max(maxIndex - D, 0) # bound at zero
         j = min(maxIndex + D + 1, T) # bound at T
-        print >>sys.stderr, "Sublocalized best location:", numpy.sum(bins[i:j]*numpy.exp(LOD[i:j])) / numpy.sum(numpy.exp(LOD[i:j]))
+        print("Sublocalized best location:", numpy.sum(bins[i:j]*numpy.exp(LOD[i:j])) / numpy.sum(numpy.exp(LOD[i:j])), file=sys.stderr)
     except ValueError:
         pass
 
@@ -429,13 +429,13 @@ def doComputation(y, y_var, y2, y_var2, d, d2, T, bins):
 if __name__ == "__main__":
     args = parseArgs()
 
-    print >>sys.stderr, "Multipool version:", VERSION
-    print >>sys.stderr, "Python version:", sys.version
-    print >>sys.stderr, "Scipy version:", scipy.__version__
-    print >>sys.stderr, "Numpy version:", numpy.__version__
+    print("Multipool version:", VERSION, file=sys.stderr)
+    print("Python version:", sys.version, file=sys.stderr)
+    print("Scipy version:", scipy.__version__, file=sys.stderr)
+    print("Numpy version:", numpy.__version__, file=sys.stderr)
     if not args.noPlot:
         import matplotlib
-        print >>sys.stderr, "Matplotlib version:", matplotlib.__version__
+        print("Matplotlib version:", matplotlib.__version__, file=sys.stderr)
 
     N = args.N
     res = args.res
@@ -444,7 +444,7 @@ if __name__ == "__main__":
 
     REPLICATES = (args.mode == "replicates")
 
-    print >>sys.stderr, "Recombination fraction:", p, "in cM:", 1.0*res/p/100.0
+    print("Recombination fraction:", p, "in cM:", 1.0*res/p/100.0, file=sys.stderr)
 
     # Data loading and preprocessing.
     y, y_var, y2, y_var2, d, d2, T, bins = doLoading(args.fins, args.filter)
