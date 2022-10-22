@@ -1,10 +1,12 @@
-Multipool 0.10.2
+Multipool 0.10.3
 ==============
 
 [![Build Status](https://travis-ci.org/matted/multipool.svg)](https://travis-ci.org/matted/multipool) [![Coverage Status](https://coveralls.io/repos/matted/multipool/badge.svg)](https://coveralls.io/r/matted/multipool)
 
 See the [wiki page](https://github.com/matted/multipool/wiki) for more
 details, including usage examples and installation instructions.
+
+Note: this fork has been updated for use with Python3
 
 ### Usage and options:
 
@@ -13,7 +15,7 @@ details, including usage examples and installation instructions.
                            countfile [countfile ...]
         
     Multipool: Efficient multi-locus genetic mapping with pooled sequencing,
-    version 0.10.2. See http://cgs.csail.mit.edu/multipool/ for more details.
+    version 0.10.3. See http://cgs.csail.mit.edu/multipool/ for more details.
     
     positional arguments:
       countfile             Input file[s] of allele counts
