@@ -25,7 +25,7 @@ def load_table(fin, binsize, verbose, filt):
                                         # probably just missing
                                         # fixated markers... so skip
                                         # them
-            if verbose and a+b>0: print("Skipping", line, file=sys.stderr)
+            if verbose and a+b>0: print("Skipping" + line, file=sys.stderr)
             continue
         bin_start = pos - (pos % binsize)
         temp[bin_start] += (a,b)
@@ -45,11 +45,11 @@ def load_table(fin, binsize, verbose, filt):
 
         # Filter by median absolute deviation.
         cutoff = 20 * numpy.median(abs(numpy.array(list(temp.values())) - median)) + median
-        print("cutoff:", cutoff, file=sys.stderr)
+        print("cutoff:" + cutoff, file=sys.stderr)
 
         for k,v in temp.items():
             if sum(v) > cutoff:
-                print("Filtering allele counts:", v, file=sys.stderr)
+                print("Filtering allele counts:" + v, file=sys.stderr)
                 temp[k] = v-v
 
     means = numpy.zeros(len(bin_starts))
