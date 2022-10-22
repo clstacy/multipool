@@ -8,7 +8,8 @@
 #
 
 import argparse, collections, sys, logging
-import numpy, scipy.stats
+import numpy
+import scipy.stats
 
 VERSION = "0.10.2"
 
