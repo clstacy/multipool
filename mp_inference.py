@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Multipool: Efficient multi-locus genetic mapping with pooled sequencing
 # 
