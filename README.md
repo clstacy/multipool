@@ -6,6 +6,10 @@ Multipool 0.10.3
 See the [wiki page](https://github.com/matted/multipool/wiki) for more
 details, including usage examples and installation instructions.
 
+To use this fork, pull with the command:
+
+`git clone https://github.com/clstacy/multipool.git`
+
 Note: this fork has been updated for use with Python3
 
 ### Usage and options:
