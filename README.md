@@ -1,7 +1,7 @@
 Multipool 0.10.3
 ==============
 
-[![Build Status](https://travis-ci.org/matted/multipool.svg)](https://travis-ci.org/matted/multipool) [![Coverage Status](https://coveralls.io/repos/matted/multipool/badge.svg)](https://coveralls.io/r/matted/multipool)
+[![Build Status](https://travis-ci.org/clstacy/multipool.svg)](https://travis-ci.org/clstacy/multipool) [![Coverage Status](https://coveralls.io/repos/clstacy/multipool/badge.svg)](https://coveralls.io/r/clstacy/multipool)
 
 See the [wiki page](https://github.com/matted-zz/multipool/wiki) for more
 details, including usage examples and installation instructions.
