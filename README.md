@@ -3,7 +3,7 @@ Multipool 0.10.3
 
 [![Build Status](https://travis-ci.org/matted/multipool.svg)](https://travis-ci.org/matted/multipool) [![Coverage Status](https://coveralls.io/repos/matted/multipool/badge.svg)](https://coveralls.io/r/matted/multipool)
 
-See the [wiki page](https://github.com/matted/multipool/wiki) for more
+See the [wiki page](https://github.com/matted-zz/multipool/wiki) for more
 details, including usage examples and installation instructions.
 
 To use this fork, pull with the command:
