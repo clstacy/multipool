@@ -1,7 +1,7 @@
 language: python
 python:
-  - 2.6
-  - 2.7
+  - 3.7
+  - 3.9
 
 notifications:
   on_success: change
@@ -15,7 +15,7 @@ before_install:
   - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
   - chmod +x miniconda.sh
   - ./miniconda.sh -b -f
-  - export PATH=/home/travis/miniconda2/bin:$PATH
+  - export PATH=/home/travis/miniconda/bin:$PATH
   - conda update --yes conda
   - conda create --yes -n condaenv python=$TRAVIS_PYTHON_VERSION
   - conda install --yes -n condaenv pip
@@ -23,7 +23,7 @@ before_install:
 
 # Install packages
 install:
-  - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then conda install --yes python=$TRAVIS_PYTHON_VERSION argparse; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.9 ]]; then conda install --yes python=$TRAVIS_PYTHON_VERSION argparse; fi
   - conda install --yes python=$TRAVIS_PYTHON_VERSION atlas numpy scipy
   - python setup.py install
 
