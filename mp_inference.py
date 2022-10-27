@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 #
 # Multipool: Efficient multi-locus genetic mapping with pooled sequencing
 # 
@@ -46,7 +46,7 @@ def load_table(fin, binsize, verbose, filt):
 
         # Filter by median absolute deviation.
         cutoff = 20 * numpy.median(abs(numpy.array(list(temp.values())) - median)) + median
-        print("cutoff:" + cutoff, file=sys.stderr)
+        print("cutoff:" + str(cutoff), file=sys.stderr)
 
         for k,v in temp.items():
             if sum(v) > cutoff:
