@@ -50,7 +50,7 @@ def load_table(fin, binsize, verbose, filt):
 
         for k,v in temp.items():
             if sum(v) > cutoff:
-                print("Filtering allele counts:" + v, file=sys.stderr)
+                print("Filtering allele counts:" + str(v), file=sys.stderr)
                 temp[k] = v-v
 
     means = numpy.zeros(len(bin_starts))
@@ -385,7 +385,7 @@ def doComputation(y, y_var, y2, y_var2, d, d2, T, bins):
         else:
             break
 
-    print("50% credible interval spans", bins[left], bins[right], "length is:", (bins[right] - bins[left]), file=sys.stderr)
+    print("50% credible interval spans", bins[left], bins[right], "length is:", str(bins[right] - bins[left]), file=sys.stderr)
 
     cumul, mean = 0.0, 0.0
     left, right = None, None
