@@ -11,7 +11,7 @@ import argparse, collections, sys, logging
 import numpy
 import scipy.stats
 
-VERSION = "0.10.2"
+VERSION = "0.10.3"
 
 def load_table(fin, binsize, verbose, filt):
     temp = collections.defaultdict(lambda : numpy.zeros(2))
