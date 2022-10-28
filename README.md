@@ -39,6 +39,7 @@ Note: this fork has been updated for use with Python3
       -np, --noPlot         Turn off plotting output.. Default: false
       -o OUTFILE, --output OUTFILE
                             Output file for bin-level statistics
+      --plotFile PLOTFILE   Write plot as png file.
       -v, --version         show program's version number and exit
     
 
