@@ -1,4 +1,4 @@
-Multipool 0.10.3
+Multipool 0.10.4
 ==============
 
 See the [wiki page](https://github.com/matted-zz/multipool/wiki) for more
