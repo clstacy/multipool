@@ -11,7 +11,7 @@ import argparse, collections, sys, logging
 import numpy
 import scipy.stats
 
-VERSION = "0.10.3"
+VERSION = "0.10.4"
 
 def load_table(fin, binsize, verbose, filt):
     temp = collections.defaultdict(lambda : numpy.zeros(2))
@@ -216,8 +216,8 @@ def doLoading(fins, filt):
             max_last_bin_start = max(last_bin_starts)
             max_last_bin_edge = max_last_bin_start + binsize
             bins = numpy.arange(min_first_bin_start, max_last_bin_edge + 1, binsize)
-            lpads = [ (b - min_first_bin_start) / binsize for b in first_bin_starts ]
-            rpads = [ (max_last_bin_start - b) / binsize for b in last_bin_starts ]
+            lpads = [ (b - min_first_bin_start) // binsize for b in first_bin_starts ]
+            rpads = [ (max_last_bin_start - b) // binsize for b in last_bin_starts ]
 
             pad_widths = lpads[0], rpads[0]
             y = numpy.pad(y, pad_widths, 'constant', constant_values=0)
